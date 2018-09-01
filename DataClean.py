@@ -1,5 +1,6 @@
 import jieba
 import csv
+import itertools
 
 
 class Label():
@@ -28,8 +29,8 @@ class Label():
 
     def __str__(self):
         s = ""
-        for k, v in enumerate(self.label):
-            s += str(k) + " : " + str(v)
+        for k in self.label.keys():
+            s += str(k) + " : " + self.label[k] + ",    "
         return s
 
 
@@ -40,13 +41,12 @@ class DataCleaner():
         self.labels = []
         with open(file_name, 'r', encoding='utf-8-sig') as f:
             csv_file = csv.reader(f)
-            for row in csv_file:
+            for row in itertools.islice(csv_file, 1, None):
                 self.content_list.append(row[1])
                 self.labels.append(Label(row[2:]))
 
-
         for i in range(len(self.content_list)):
-            if i %1000 == 0:
+            if i % 1000 == 0:
                 print(self.content_list[i])
                 print(self.labels[i])
 
